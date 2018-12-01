@@ -1,11 +1,9 @@
 +++
 date = "2001-03-01T09:30:00+00:00"
-draft = true
 layout = "post"
 title = "How to implement Singleton Pattern in Go"
 
 +++
-
 One of the most common design patterns that every developer needs to know is the Singleton Design pattern. Wikipedia defines [Singleton Pattern](https://en.wikipedia.org/wiki/Singleton_pattern) as:
 
 > the singleton pattern is a software design pattern that restricts the instantiation of a class to one object. 
@@ -161,4 +159,4 @@ This looks much simpler and easier to understand. And this also assures you that
 
 # Conclusion
 
-It is very easy to write code in Golang, especially for programmers coming from other languages like python. However, you have to ensure your code is correct, thread-safe and can use the various features of Golang like concurrency properly. 
+It is very easy to write code in Golang, especially for programmers coming from other languages like python. However, you have to ensure your code is correct, thread-safe and can use the various features of Golang like concurrency properly.
