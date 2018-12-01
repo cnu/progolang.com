@@ -1,5 +1,5 @@
 +++
-date = "2001-03-01T09:30:00+00:00"
+date = "2018-12-01T09:23:00+00:00"
 layout = "post"
 title = "How to implement Singleton Pattern in Go"
 
