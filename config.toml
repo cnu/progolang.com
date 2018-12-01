@@ -5,6 +5,6 @@ title = "Pro Golang"
 [params]
 disqusShortname = ""
 googleAnalytics = ""
-layoutReverse = false
+layoutReverse = true
 theme = "hyde"
 themeColor = ""
