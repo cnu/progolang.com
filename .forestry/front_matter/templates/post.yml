@@ -20,3 +20,5 @@ fields:
   hidden: false
   default: ''
   description: Add publishing date here
+pages:
+- content/posts/how-to-implement-singleton-pattern-in-go.md
