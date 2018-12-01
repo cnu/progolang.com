@@ -8,3 +8,7 @@ googleAnalytics = ""
 layoutReverse = true
 theme = "hyde"
 themeColor = ""
+
+[permalinks]
+  post = "/:slug/"
+  page = "/:slug/"
