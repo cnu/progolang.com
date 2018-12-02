@@ -2,15 +2,18 @@ baseURL = "https://progolang.com/"
 languageCode = "en-us"
 theme = "hyde-hyde"
 title = "Pro Golang"
+disqusShortname = "progolang"
+googleAnalytics = "UA-128175831-1"
 
 [params]
+  author = "Srinivasan Rangarajan"
   description = "Go tutorials, tips and tricks."
-  disqusShortname = "progolang"
-  googleAnalytics = "UA-128175831-1"
+  dateformat = "Jan 2, 2006"
   layoutReverse = true
   # themeColor = "theme-base-08"
   copyright = "© ProGolang.com 2018. All rights reserved."
   highlightjs = true
+  highlightjsstyle = "github"
   toc = "tocbot"
 
 [author]
