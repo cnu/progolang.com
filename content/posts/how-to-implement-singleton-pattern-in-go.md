@@ -11,7 +11,7 @@ One of the most common design patterns that every developer needs to know is the
 To translate that in Go, whenever any goroutine tries to access an instance of a variable, you should get the same variable. 
 
 There are various ways to implement the singleton pattern in Go, but it is also quite easy to get it wrong. Let's look at the different ways you can implement a singleton pattern and why most of them are wrong.
-
+<!--more-->
 ## GetInstance instead of New constructor
 
 If you come from other programming languages, this is the most common way to implement the singleton pattern. However, there are inherent problems with thread-safety in this code. 
