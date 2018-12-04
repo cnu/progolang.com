@@ -4,6 +4,9 @@ layout = "post"
 title = "How to download files in Go"
 highlightjslanguages = ["go"]
 toc = ""
+categories = [ "howto" ]
+tags = ["files", "http", "tools", "command line"]
+
 +++
 
 

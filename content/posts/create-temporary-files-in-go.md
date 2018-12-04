@@ -3,6 +3,8 @@ date = "2018-12-03T01:48:00+05:30"
 layout = "post"
 title = "How to create temporary files in go"
 highlightjslanguages = ["go"]
+categories = [ "howto" ]
+tags = ["files", "tempfile"]
 toc = ""
 +++
 

@@ -3,6 +3,9 @@ date = "2018-12-01T09:23:00+00:00"
 layout = "post"
 title = "How to implement Singleton Pattern in Go"
 highlightjslanguages = ["go"]
+categories = [ "howto" ]
+tags = ["singleton", "thread safety", "design patterns"]
+
 +++
 One of the most common design patterns that every developer needs to know is the Singleton Design pattern. Wikipedia defines [Singleton Pattern](https://en.wikipedia.org/wiki/Singleton_pattern) as:
 
