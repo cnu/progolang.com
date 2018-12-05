@@ -12,6 +12,8 @@ Environment variables are an easy way to pass configuration settings to your pro
 
 To read/write environment variables, Go has three functions in the `os` package.
 
+<!--more-->
+
 ## os.Setenv
 
 [os.Setenv](https://golang.org/pkg/os/#Setenv) sets a value of an environment variable by the key name. This is the signature of the function.

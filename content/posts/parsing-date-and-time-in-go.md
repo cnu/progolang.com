@@ -14,7 +14,11 @@ Go does datetime parsing slightly differently. Instead of having cryptic format 
 
 > Mon Jan 2 15:04:05 MST 2006
 
-Why this specific date? If you write it down in this format, it's obvious. 
+Why this specific date? 
+
+<!--more-->
+
+If you write it down in this format, it's obvious. 
 
 > 01/02 03:04:05PM ‘06 -0700.
 
