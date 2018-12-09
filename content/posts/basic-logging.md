@@ -12,6 +12,8 @@ Any application you write, should have proper logging to ensure you are able to 
 
 Go has a native logging package called `log`. It has a standard Logger, which has helper functions to log messages and errors. The default Logger prints the date and time stamp of the logged error, which makes it much more useful than using `fmt.Println`
 
+<!--more-->
+
 ## Basic Logging
 
 Lets see a quick example of how to log when you get an error.
