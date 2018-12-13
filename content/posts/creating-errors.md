@@ -163,7 +163,7 @@ Our main function can use this function, and if it gets back any error, it will 
 
 ## Checking for error type
 
-In this function, `AreaOfRect` returns only areaError type and so, we check for the error type by using the `err, ok := err.(*areaError)` line. But if we have a function which can return multiple different error types, we can use a switch-case statement like this.
+In this function, `AreaOfRect` returns only `areaError` type and so, we check for the error type by using the `err, ok := err.(*areaError)` line. But if we have a function which can return multiple different error types, we can use a switch-case statement like this.
 
     if err := FunctionToCall(); err != nil {
         switch e := err.(type) {

@@ -7,7 +7,7 @@ googleAnalytics = "UA-128175831-1"
 
 [params]
   author = "Srinivasan Rangarajan"
-  description = "Go tutorials, tips and tricks."
+  description = "Articles, Tips and Tutorials to become a Pro Go Programmer."
   dateformat = "Jan 2, 2006"
   layoutReverse = true
   # themeColor = "theme-base-08"
