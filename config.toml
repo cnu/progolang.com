@@ -1,6 +1,6 @@
 baseURL = "https://progolang.com/"
 languageCode = "en-us"
-theme = "hyde-hyde"
+theme = "hyde"
 title = "Pro Golang"
 disqusShortname = "progolang"
 googleAnalytics = "UA-128175831-1"
@@ -10,7 +10,7 @@ googleAnalytics = "UA-128175831-1"
   description = "Articles, Tips and Tutorials to become a Pro Go Programmer."
   dateformat = "Jan 2, 2006"
   layoutReverse = true
-  # themeColor = "theme-base-08"
+  themeColor = "theme-base-0f"
   copyright = "© ProGolang.com 2018. All rights reserved."
   highlightjs = true
   highlightjsstyle = "github"
