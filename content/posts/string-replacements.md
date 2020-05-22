@@ -18,22 +18,26 @@ Let's look at two such functions.
 
 Just as the name suggests, this [`strings.Replace`](https://golang.org/pkg/strings/#Replace) function does a very basic string replacement. This is the signature of this function.
 
-    func Replace(s, old, new string, n int) string
+```go
+func Replace(s, old, new string, n int) string
+```
 
 `s` is the string in which you want to replace `old` with `new` and the integer `n` tells how many occurences should be replaced. If `n` is < 0, all occurences will be replaced.
 
-    package main
+```go
+package main
 
-    import (
-        "strings"
-        "fmt"
-    )
+import (
+    "strings"
+    "fmt"
+)
 
-    const refString = "Apple is the most customer centric company. Apple is the first company to reach 1 Trillion market cap in the world."
-    func main() {
-        out := strings.Replace(refString, "Apple", "Amazon", 1)
-        fmt.Println(out)
-    }
+const refString = "Apple is the most customer centric company. Apple is the first company to reach 1 Trillion market cap in the world."
+func main() {
+    out := strings.Replace(refString, "Apple", "Amazon", 1)
+    fmt.Println(out)
+}
+```
 
 As expected, this prints the following.
 
@@ -43,17 +47,19 @@ As expected, this prints the following.
 
 The `strings.Replace` works fine if you have only one string to replace. If you have multiple strings, you would need something more powerful. Thats why we have the [`strings.NewReplacer`](https://golang.org/pkg/strings/#NewReplacer). The NewReplacer function takes in pairs of old:new strings and returns a new Replacer. You can call the Replace method on this struct to do a quick replacement on your string.
 
-    package main
+```go
+package main
 
-    import (
-        "fmt"
-        "strings"
-    )
+import (
+    "fmt"
+    "strings"
+)
 
-    func main() {
-        r := strings.NewReplacer("<", "&lt;", ">", "&gt;")
-        fmt.Println(r.Replace("This is <b>HTML</b>!"))
-    }
+func main() {
+    r := strings.NewReplacer("<", "&lt;", ">", "&gt;")
+    fmt.Println(r.Replace("This is <b>HTML</b>!"))
+}
+```
 
 The advantage of using the strings.NewReplacer is that it uses an efficient data structure (called Trie) to do all the replacements in a single pass of the string. This is much faster if you have a lot of very basic string replacements. 
 

@@ -29,13 +29,13 @@ It is January 2nd, 3:04:05 PM of 2006, UTC-0700.
 Now whenever you need to parse a date string, you have to use this layout and pass to the `time.Parse` function.
 And if you have a `time.Time` type, you can use the `Format` function to convert it to a string using the same layout structure.
 
-
-    input := "2018-04-24"
-    layout := "2006-01-02"
-    t, _ := time.Parse(layout, input)
-    fmt.Println(t)                       // 2018-04-24 00:00:00 +0000 UTC
-    fmt.Println(t.Format("02-Jan-2006")) // 24-Apr-2018
-
+```go
+input := "2018-04-24"
+layout := "2006-01-02"
+t, _ := time.Parse(layout, input)
+fmt.Println(t)                       // 2018-04-24 00:00:00 +0000 UTC
+fmt.Println(t.Format("02-Jan-2006")) // 24-Apr-2018
+```
 
 ## Date and Time Options Cheatsheet
 

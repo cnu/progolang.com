@@ -16,39 +16,41 @@ Go has similar functions. Lets look at a sample code which create temporary fold
 
 Here is the example source code of the program. 
 
-    package main
+```go
+package main
 
-    import (
-        "fmt"
-        "io/ioutil"
-        "os"
-    )
+import (
+    "fmt"
+    "io/ioutil"
+    "os"
+)
 
-    func main() {
+func main() {
 
-        // Create a Temp File:  This will create a filename like /tmp/pre-23423234
-        // If we use a pattern like "pre-*.ext", you can get a file like: /tmp/pre-23423234.ext
-        tmpFile, err := ioutil.TempFile(os.TempDir(), "pre-")
-        if err != nil {
-            fmt.Println("Cannot create temporary file", err)
-        }
-
-        // cleaning up by removing the file
-        defer os.Remove(tmpFile.Name())
-
-        fmt.Println("Created a Temp File: " + tmpFile.Name())
-
-        // Write to the file
-        text := []byte("Writing some text into the temp file.")
-        if _, err = tmpFile.Write(text); err != nil {
-            fmt.Println("Failed to write to temporary file", err)
-        }
-        
-        // Close the file
-        if err := tmpFile.Close(); err != nil {
-            fmt.Println(err)
-        }
+    // Create a Temp File:  This will create a filename like /tmp/pre-23423234
+    // If we use a pattern like "pre-*.ext", you can get a file like: /tmp/pre-23423234.ext
+    tmpFile, err := ioutil.TempFile(os.TempDir(), "pre-")
+    if err != nil {
+        fmt.Println("Cannot create temporary file", err)
     }
+
+    // cleaning up by removing the file
+    defer os.Remove(tmpFile.Name())
+
+    fmt.Println("Created a Temp File: " + tmpFile.Name())
+
+    // Write to the file
+    text := []byte("Writing some text into the temp file.")
+    if _, err = tmpFile.Write(text); err != nil {
+        fmt.Println("Failed to write to temporary file", err)
+    }
+    
+    // Close the file
+    if err := tmpFile.Close(); err != nil {
+        fmt.Println(err)
+    }
+}
+```
 
 The [io/ioutil](https://golang.org/pkg/io/ioutil/) package contains two function [`TempDir`](https://golang.org/pkg/io/ioutil/#TempDir) and [`TempFile`](https://golang.org/pkg/io/ioutil/#TempFile) to create a temporary directory and a temporary file. 
 

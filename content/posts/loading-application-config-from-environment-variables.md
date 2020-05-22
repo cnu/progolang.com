@@ -18,58 +18,67 @@ You create a config structure with all the variables you want to load and create
 
 This is the signature of the Process function. 
 
-    func Process(prefix string, spec interface{}) error
+```go
+func Process(prefix string, spec interface{}) error
+```
 
 The prefix parameter is a string prefix you can use to maintain your environment variables without any namespace collisions with other programs running on that machine.
 
 Here is a sample program which reads a few environment variables, loads them into a config structure having boolean, string and unsigned integer values. 
 
-    package main
+```go
+package main
 
-    import (
-        "fmt"
-        "log"
+import (
+    "fmt"
+    "log"
 
-        "github.com/kelseyhightower/envconfig"
-    )
+    "github.com/kelseyhightower/envconfig"
+)
 
-    type Config struct {
-        Debug       bool
-        DatabaseURL string
-        Timeout     uint
+type Config struct {
+    Debug       bool
+    DatabaseURL string
+    Timeout     uint
+}
+
+func main() {
+    var config Config
+    err := envconfig.Process("APP", &config)
+    if err != nil {
+        log.Fatal(err)
     }
 
-    func main() {
-        var config Config
-        err := envconfig.Process("APP", &config)
-        if err != nil {
-            log.Fatal(err)
-        }
-
-        fmt.Println(config.Debug)
-        fmt.Println(config.DatabaseURL)
-        fmt.Println(config.Timeout)
-    }
-
+    fmt.Println(config.Debug)
+    fmt.Println(config.DatabaseURL)
+    fmt.Println(config.Timeout)
+}
+```
 
 If you run the program, you would just get back the default zero values for the different struct members. 
 
-    $ go run envsample.go
-    false
+```
+$ go run envsample.go
+false
 
-    0
+0
+```
 
 But if you set the environment variables and run it again, you can get back the values. On a unix system, you can set the environment variables using the export command.
 
-    export APP_DEBUG=true
-    export APP_DATABASEURL=localhost:5432
-    export APP_TIMEOUT=60
+```
+export APP_DEBUG=true
+export APP_DATABASEURL=localhost:5432
+export APP_TIMEOUT=60
+```
 
 Now running the program again, will give the output you were expecting. 
 
-    $ go run envsample.go
-    true
-    localhost:5432
-    60
+```
+$ go run envsample.go
+true
+localhost:5432
+60
+```
 
 This is very useful when you are writing API servers or microservices which need to load a set of config and run in a docker container or PaaS like Heroku. 

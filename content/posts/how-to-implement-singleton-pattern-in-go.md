@@ -19,18 +19,20 @@ There are various ways to implement the singleton pattern in Go, but it is also 
 
 If you come from other programming languages, this is the most common way to implement the singleton pattern. However, there are inherent problems with thread-safety in this code. 
 
-    package singleton
+```go
+package singleton
 
-    type singleton struct {}
+type singleton struct {}
 
-    var instance *singleton
+var instance *singleton
 
-    func GetInstance() *singleton {
-        if instance == nil {
-            instance = &singleton{}
-        }
-        return instance
+func GetInstance() *singleton {
+    if instance == nil {
+        instance = &singleton{}
     }
+    return instance
+}
+```
 
 In the above code, let's say multiple goroutines come to the if condition and check if the instance is nil at the same time, each goroutine would create its own reference of the variable. There is absolutely no guarantee which instance would be returned to which goroutine. 
 
@@ -45,18 +47,20 @@ If you have a thread safety issue, it makes sense to put a lock around the code 
 
 Take a look at this code below. 
 
-    var mut Sync.Mutex
+```go
+var mut Sync.Mutex
 
-    func GetInstance() *singleton {
-        // Lock and unlock the entire GetInstance function
-        mut.Lock()
-        defer mu.Unlock()
+func GetInstance() *singleton {
+    // Lock and unlock the entire GetInstance function
+    mut.Lock()
+    defer mu.Unlock()
 
-        if instance == nil {
-            instance = &singleton{}
-        }
-        return instance
+    if instance == nil {
+        instance = &singleton{}
     }
+    return instance
+}
+```
 
 In the above code, as soon as you enter the function, you are using a mutex lock, and only then you are checking whether your instance exists or not. By making sure your code is covered by a `Lock()` and `Unlock()` statement, only one goroutine can execute this code.
 
@@ -67,11 +71,13 @@ However, do you need such aggressive locking and unlocking to every call of this
 
 The next obvious solution is to check if you need to lock, lock, and then doing a second check again before performing the actual operation. To explain it in python, 
 
+```go
+if not instance_exists():
+    lock()
     if not instance_exists():
-        lock()
-        if not instance_exists():
-            create_instance()
-    return instance
+        create_instance()
+return instance
+```
 
 The first check is to determine whether we need to lock or not. Once we acquire the lock, we need to check once again if the instance exists, because between the time we did the first check and the lock statement, some other thread could have created the instance. If the second check also passes, we create the instance. 
 
@@ -79,17 +85,19 @@ If the first check fails, we don't have to wait for an expensive lock to acquire
 
 Doing the same logic in Golang:
 
-    func GetInstance() *singleton {
-        if instance == nil {
-            mu.Lock()
-            defer mu.Unlock()
+```go
+func GetInstance() *singleton {
+    if instance == nil {
+        mu.Lock()
+        defer mu.Unlock()
 
-            if instance == nil {
-                instance = &singleton{}
-            }
+        if instance == nil {
+            instance = &singleton{}
         }
-        return instance
     }
+    return instance
+}
+```
 
 Though this code is a lot better than the old code, there is still a teeny-tiny chance that it could fail. The if condition check is not an atomic check and though it might work fine for 99.99% of the times, it is still technically the wrong way to do it. 
 
@@ -98,26 +106,31 @@ The right way to implement a singleton pattern in Go is to use the `sync` packag
 
 The way to use the `Once.Do()` function is as below.
 
-    once.Do(func() {
-        // This will be executed only once in the entire lifetime of the program
-    })
+```go
+once.Do(func() {
+    // This will be executed only once in the entire lifetime of the program
+})
+```
 
 Here is a sample program which shows how even if you call it multiple times, it gets executed only once. 
 
-    package main
-    import (
-        "fmt"
-        "sync"
-    )
-    var once sync.Once
-    func main() {
-        for i := 0; i < 10; i++ {
-            only_once()
-        }
+```go
+package main
+import (
+    "fmt"
+    "sync"
+)
+var once sync.Once
+func main() {
+    for i := 0; i < 10; i++ {
+        only_once()
     }
-    func only_once() {
-        once.Do(func() { fmt.Println("Hi") })
-    }
+}
+func only_once() {
+    once.Do(func() { fmt.Println("Hi") })
+}
+```
+
 [Run in Playground](https://play.golang.org/p/cryDuoSmGMZ)
 
 If you want to understand how it works, take a look at the [source-code](https://golang.org/src/sync/once.go?s=1137:1164#L25) of the function. 
@@ -126,23 +139,25 @@ You can see that it uses the `sync.atomic` package's `StoreUint32` and `LoadUint
 
 Now if we use `Once.Do()` in our singleton package, we get the following code.
 
-    package singleton
+```go
+package singleton
 
-    import (
-        "sync"
-    )
+import (
+    "sync"
+)
 
-    type singleton struct {}
+type singleton struct {}
 
-    var instance *singleton
-    var once sync.Once
+var instance *singleton
+var once sync.Once
 
-    func GetInstance() *singleton {
-        once.Do(func() {
-            instance = &singleton{}
-        })
-        return instance
-    }
+func GetInstance() *singleton {
+    once.Do(func() {
+        instance = &singleton{}
+    })
+    return instance
+}
+```
 
 This looks much simpler and easier to understand. And this also assures you that the reference to the variable you get out of this function call is always the same.
 

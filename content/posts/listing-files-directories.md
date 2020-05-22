@@ -20,20 +20,21 @@ Go also has a [Glob](https://golang.org/pkg/path/filepath/#Glob) function which 
 
 It takes a string containing the glob pattern and returns back a slice of filenames. Here is a sample program which gets all files ending with `.jsonl` extension in `/data/` directory. 
 
-    package main
+```go
+package main
 
-    import (
-        "fmt"
-        "path/filepath"
-    )
+import (
+    "fmt"
+    "path/filepath"
+)
 
-    func main() {
-        matches, _ := filepath.Glob("/data/*.jsonl")
-        for _, match := range matches {
-            fmt.Println(match)
-        }
+func main() {
+    matches, _ := filepath.Glob("/data/*.jsonl")
+    for _, match := range matches {
+        fmt.Println(match)
     }
-
+}
+```
 
 ## Walk
 
@@ -41,41 +42,46 @@ Glob is useful if you already know the pattern of the file you want to process. 
 
 Here is the signature of the [Walk](https://golang.org/pkg/path/filepath/#Walk) function.
 
+```go
     func Walk(root string, walkFn WalkFunc) error
+```
 
 You start with a root directory from which you want to start the walk and for each file/directory in the root directory, the walkFn gets called. Now WalkFunc is a type of function which takes in the path, fileinfo and error and does something with the file that gets passed in.
 
+```go
     type WalkFunc func(path string, info os.FileInfo, err error) error
+```
 
 This sounds complicated, but lets see a simple example to make things clear.
 
+```go
+package main
 
-    package main
+import (
+    "fmt"
+    "os"
+    "path/filepath"
+)
 
-    import (
-        "fmt"
-        "os"
-        "path/filepath"
-    )
+func WalkAllFilesInDir(dir string) error {
+    return filepath.Walk(dir, func(path string, info os.FileInfo, e error) error {
+        if e != nil {
+            return e
+        }
 
-    func WalkAllFilesInDir(dir string) error {
-        return filepath.Walk(dir, func(path string, info os.FileInfo, e error) error {
-            if e != nil {
-                return e
-            }
+        // check if it is a regular file (not dir)
+        if info.Mode().IsRegular() {
+            fmt.Println("file name:", info.Name())
+            fmt.Println("file path:", path)
+        }
+        return nil
+    })
+}
 
-            // check if it is a regular file (not dir)
-            if info.Mode().IsRegular() {
-                fmt.Println("file name:", info.Name())
-                fmt.Println("file path:", path)
-            }
-            return nil
-        })
-    }
-
-    func main() {
-        WalkAllFilesInDir("/home/username/go/src/github.com/")
-    }
+func main() {
+    WalkAllFilesInDir("/home/username/go/src/github.com/")
+}
+```
 
 If you look at the main function, it is pretty simple - you just pass a directory to the `WalkAllFilesInDir` function. 
 But WalkAlFilesInDir just calls the Walk function, with the dir string and an anonymous function of type WalkFunc. 
@@ -86,12 +92,14 @@ If it's a file, we just print the file name and the file path. Else, we skip to 
 
 The output looks something like this 
 
-    file path: /home/username/go/src/github.com/uudashr/gopkgs/Makefile
-    file name: README.md
-    file path: /home/username/go/src/github.com/uudashr/gopkgs/README.md
-    file name: main.go
-    file path: /home/username/go/src/github.com/uudashr/gopkgs/cmd/gopkgs/main.go
-    file name: doc.go
+```
+file path: /home/username/go/src/github.com/uudashr/gopkgs/Makefile
+file name: README.md
+file path: /home/username/go/src/github.com/uudashr/gopkgs/README.md
+file name: main.go
+file path: /home/username/go/src/github.com/uudashr/gopkgs/cmd/gopkgs/main.go
+file name: doc.go
+```
 
 You can see that the Walk function goes through each and every subdirectory. This is an easy way to literally walk through all of your files and folders and process it. 
 

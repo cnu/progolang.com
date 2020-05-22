@@ -16,25 +16,26 @@ Let's first see the simplest way to write test cases for your functions, then se
 
 For this example, we will use a simple function which tests whether a given number is prime or not. The code itself isn't optimized, but we will ignore that for now.
 
-    package prime
+```go
+package prime
 
-    func Prime(number uint) bool {
-        switch number {
-        case 0:
-            return false
-        case 1:
-            return false
-        }
-        var i uint = 2
-        for i < number {
-            if number%i == 0 {
-                return false
-            }
-            i++
-        }
-        return true
+func Prime(number uint) bool {
+    switch number {
+    case 0:
+        return false
+    case 1:
+        return false
     }
-
+    var i uint = 2
+    for i < number {
+        if number%i == 0 {
+            return false
+        }
+        i++
+    }
+    return true
+}
+```
 
 ## Simple Test Case
 
@@ -42,13 +43,14 @@ Go expects your test cases to be in a file which ends in `_test.go`. We will cre
 
 Here is a simple function to test our Prime number checker.
 
-
-    func TestPrime(t *testing.T) {
-        res := Prime(2)
-        if res != true {
-            t.Errorf("Prime(2) = %t, expected true", res)
-        }
+```go
+func TestPrime(t *testing.T) {
+    res := Prime(2)
+    if res != true {
+        t.Errorf("Prime(2) = %t, expected true", res)
     }
+}
+```
 
 We are checking if 2 is a prime or not. We are testing the result from the Prime function and returning an error, if the result doesn't match the expected value.
 
@@ -62,38 +64,40 @@ If we have a list of possible test cases to test, we can create a slice of those
 
 First, lets create a slice of structs that we can use to store our test cases and the expected result.
 
-
-    var tests = []struct {
-        n   uint
-        exp bool
-    }{
-        {0, false},
-        {1, false},
-        {2, true},
-        {3, true},
-        {4, false},
-        {5, true},
-        {6, false},
-        {49, false},
-        {97, true},
-        {997, true},
-    }
+```go
+var tests = []struct {
+    n   uint
+    exp bool
+}{
+    {0, false},
+    {1, false},
+    {2, true},
+    {3, true},
+    {4, false},
+    {5, true},
+    {6, false},
+    {49, false},
+    {97, true},
+    {997, true},
+}
+```
 
 Since this Prime function is very simple, takes in one argument and returns a boolean, our struct matches the same data types. Now we have a list of test cases that we can iterate through and test one by one. 
 
 
 To do that, let's replace the TestPrime function with this new TestPrime function.
 
-
-    func TestPrime(t *testing.T) {
-        for _, e := range tests {
-            res := Prime(e.n)
-            if res != e.exp {
-                t.Errorf("Prime(%d) = %t, expected %t",
-                    e.n, res, e.exp)
-            }
+```go
+func TestPrime(t *testing.T) {
+    for _, e := range tests {
+        res := Prime(e.n)
+        if res != e.exp {
+            t.Errorf("Prime(%d) = %t, expected %t",
+                e.n, res, e.exp)
         }
     }
+}
+```
 
 We are iterating through the tests slice, calling Prime with the number and storing the result back in a variable. Then we check the obtained result with the expected result from the struct. If they don't match, we use the `Errorf` function of the `t` object to print a nice error message. 
 

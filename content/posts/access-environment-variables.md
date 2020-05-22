@@ -18,45 +18,54 @@ To read/write environment variables, Go has three functions in the `os` package.
 
 [os.Setenv](https://golang.org/pkg/os/#Setenv) sets a value of an environment variable by the key name. This is the signature of the function.
 
-    func Setenv(key, value string) error
+```go
+func Setenv(key, value string) error
+```
 
 ## os.Getenv
 
 [os.Getenv](https://golang.org/pkg/os/#Getenv) is the complementary function which allows you to read any environment variable. It takes in a key name and returns back a string. Its upto you to convert into the correct datatype later.
 
-    func Getenv(key string) string
+```go
+func Getenv(key string) string
+```
 
 ## os.Unsetenv
 
 [os.Unsetenv](https://golang.org/pkg/os/#Unsetenv) unsets an environment variable with a key name. 
 
-    func Unsetenv(key string) error
+```go
+func Unsetenv(key string) error
+```
 
 ## Example code
 Here is a very simple example code which sets an environment variable, prints it by Getting it and then unsets it before exiting.
 
-    package main
+```go
+package main
 
-    import (
-        "fmt"
-        "os"
-    )
+import (
+    "fmt"
+    "os"
+)
 
-    func main() {
-        os.Setenv("TMPDIR", "/my/tmp")
-        defer os.Unsetenv("TMPDIR")
-        fmt.Println(os.Getenv("TMPDIR"))
-    }
-
+func main() {
+    os.Setenv("TMPDIR", "/my/tmp")
+    defer os.Unsetenv("TMPDIR")
+    fmt.Println(os.Getenv("TMPDIR"))
+}
+```
 
 ## Get back all environment variables
 
 What if you need to get back a slice of all environment variables? There is a handy os.Environ() function which does exactly that.
 
-    for _, s := range os.Environ() {
-        kv := strings.SplitN(s, "=", 2) // unpacks "key=value"
-        fmt.Printf("KEY:%q\tVAL:%q\n", kv[0], kv[1])
-    }
+```go
+for _, s := range os.Environ() {
+    kv := strings.SplitN(s, "=", 2) // unpacks "key=value"
+    fmt.Printf("KEY:%q\tVAL:%q\n", kv[0], kv[1])
+}
+```
 
 The variable s is a single string which has the key and value split by a `=` character (eg: `EDITOR=/usr/bin/vim`). We use the strings.SplitN function to parse it and store it in kv. Now this makes it easy to check only for a specific list of keys and get the values for those.
 

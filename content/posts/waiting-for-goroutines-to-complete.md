@@ -15,42 +15,50 @@ Here is a very simple function which sleeps for `n` seconds and prints a line.
 
 <!--more-->
 
-    package main
+```go
+package main
 
-    import (
-        "fmt"
-        "time"
-    )
+import (
+    "fmt"
+    "time"
+)
 
-    func delay(n time.Duration) {
-        duration := n * time.Second
-        time.Sleep(duration)
-        fmt.Println("Slept for ", duration)
-    }
+func delay(n time.Duration) {
+    duration := n * time.Second
+    time.Sleep(duration)
+    fmt.Println("Slept for ", duration)
+}
+```
 
 Now in your main function, you can call the delay function directly and it will print the output after sleeping for `n` seconds. 
 
-    func main() {
-        delay(3)
-    }
+```go
+func main() {
+    delay(3)
+}
+```
 
 But if you try to run the function as a separate goroutine, the output is empty.
 
-    func main() {
-        go delay(3)
-    }
+```go
+func main() {
+    go delay(3)
+}
+```
 
 The reason for that is once the main function invokes the delay function as a goroutine, there is no other statement to execute. 
 So the main goroutine exits, before the delay function could print it's output. 
 
 The dumb way to wait for the goroutine to finish, is to sleep in the main function after invoking the go routines. 
 
-    func main() {
-        for i := 1; i <= 3; i++ {
-            go delay(time.Duration(i))
-        }
-        time.Sleep(4 * time.Second)
+```go
+func main() {
+    for i := 1; i <= 3; i++ {
+        go delay(time.Duration(i))
     }
+    time.Sleep(4 * time.Second)
+}
+```
 
 But this isn't the correct way to handle this. 
 As we won't know in advance how many goroutines would be be run. 
@@ -65,31 +73,31 @@ The `Add` increments the counter and the `Done` decrements the counter.
 Now you can use the waitgroup's `Wait` method to block the main function till the counter reaches 0. 
 Let's see the same example, but rewritten with waitgroups. 
 
+```go
+package main
 
-    package main
+import (
+    "fmt"
+    "sync"
+    "time"
+)
 
-    import (
-        "fmt"
-        "sync"
-        "time"
-    )
+func delay(n time.Duration, wg *sync.WaitGroup) {
+    defer wg.Done()
+    duration := n * time.Second
+    time.Sleep(duration)
+    fmt.Println("Slept for ", duration)
+}
 
-    func delay(n time.Duration, wg *sync.WaitGroup) {
-        defer wg.Done()
-        duration := n * time.Second
-        time.Sleep(duration)
-        fmt.Println("Slept for ", duration)
+func main() {
+    wg := new(sync.WaitGroup)
+    for i := 1; i <= 3; i++ {
+        wg.Add(1)
+        go delay(time.Duration(i), wg)
     }
-
-    func main() {
-        wg := new(sync.WaitGroup)
-        for i := 1; i <= 3; i++ {
-            wg.Add(1)
-            go delay(time.Duration(i), wg)
-        }
-        wg.Wait()
-    }
-
+    wg.Wait()
+}
+```
 
 We can see that our delay function is modified slightly to accept a `sync.WaitGroup` variable. And the last statement you want to be executed in the goroutine is the `wg.Done()` call. 
 

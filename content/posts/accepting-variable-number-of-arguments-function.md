@@ -16,24 +16,29 @@ The way to define a variadic function is to prepend the data type with three dot
 
 Here is a simple example which explains it.
 
-    func sum(numbers ...int) int {
-        total := 0
-        for _, n := range numbers {
-            total += n
-        }
-        return total
+```go
+func sum(numbers ...int) int {
+    total := 0
+    for _, n := range numbers {
+        total += n
     }
-
+    return total
+}
+```
 
 
 This is a simple sum function, which iterated through all numbers and returns back the total. 
 Now to call this function, you just pass all the numbers as separate arguments. 
 
-	total := sum(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+```go
+total := sum(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+```
 
 By declaring the argument as a `...int`, your numbers variable is now passed into the function as a slice of integers. But what if you already have a slice of numbers and want to pass it to this function?
 
-    numbers := []int{1,2,3,4,5}
-    total := sum(numbers...)
+```go
+numbers := []int{1,2,3,4,5}
+total := sum(numbers...)
+```
 
 You just have to pass in the slice followed by three dots to unwrap the slice into individual parameters to the function. 

@@ -18,28 +18,30 @@ Go has a native logging package called `log`. It has a standard Logger, which ha
 
 Lets see a quick example of how to log when you get an error.
 
-    package main
+```go
+package main
 
-    import (
-        "errors"
-        "fmt"
-        "log"
-    )
+import (
+    "errors"
+    "fmt"
+    "log"
+)
 
-    func div(a, b float64) (ret float64, err error) {
-        if b == 0 {
-            return 0.0, errors.New("can't divide by 0")
-        }
-        return a / b, nil
+func div(a, b float64) (ret float64, err error) {
+    if b == 0 {
+        return 0.0, errors.New("can't divide by 0")
     }
+    return a / b, nil
+}
 
-    func main() {
-        ret, err := div(1.0, 0.0)
-        if err != nil {
-            log.Fatal(err)
-        }
-        fmt.Println(ret)
+func main() {
+    ret, err := div(1.0, 0.0)
+    if err != nil {
+        log.Fatal(err)
     }
+    fmt.Println(ret)
+}
+```
 
 We have a simple function which divides a number by another. But if the second number is 0, we return an error value saying, we can't divide by 0. 
 
@@ -53,22 +55,24 @@ Running this program prints this error message:
 
 By default the standard logger, logs to standard error. But if you want to log to a different file instead, you would have to use the `log.SetOutput(f)` function. SetOutput takes in any value which satisfies the `io.Writer` Interface. Lets see a simple example which logs to a local file.
 
-    package main
-    import (
-            "log"
-            "os"
-    )
+```go
+package main
+import (
+        "log"
+        "os"
+)
 
-    func main() {
-            f, err := os.OpenFile("app.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
-            if err != nil {
-                    log.Fatal(err)
-            }
-            defer f.Close()
-            log.SetOutput(f)
-            log.Println("Application started")
-            // Do the rest 
-    }
+func main() {
+        f, err := os.OpenFile("app.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+        if err != nil {
+                log.Fatal(err)
+        }
+        defer f.Close()
+        log.SetOutput(f)
+        log.Println("Application started")
+        // Do the rest 
+}
+```
 
 We open a file called app.log in write only, append mode and create a new file if it doesn't exist. Then we use log.SetOutput to set this as the logging output file. 
 After this, whenever we use log.Print, log.Fatal, log.Panic functions, it will push them to the app.log file. 

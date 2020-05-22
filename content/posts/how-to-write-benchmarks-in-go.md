@@ -16,35 +16,39 @@ Using these simple benchmarks, you can quickly examine your code's performance. 
 
 Let's use the Prime number function we wrote in the previous post for writing our benchmarks. 
 
-    package prime
+```go
+package prime
 
-    func Prime(number uint) bool {
-        switch number {
-        case 0:
-            return false
-        case 1:
-            return false
-        }
-        var i uint = 2
-        for i < number {
-            if number%i == 0 {
-                return false
-            }
-            i++
-        }
-        return true
+func Prime(number uint) bool {
+    switch number {
+    case 0:
+        return false
+    case 1:
+        return false
     }
+    var i uint = 2
+    for i < number {
+        if number%i == 0 {
+            return false
+        }
+        i++
+    }
+    return true
+}
+```
 
 ## Writing your benchmark
 
 Just like your test cases, benchmarks are placed inside the `_test.go` files, and instead of a function starting with `Test` it need to start with `Benchmark`.
 Our benchmark function is very simple and very similar to your unit test cases. 
 
-    func BenchmarkPrime(b *testing.B) {
-        for i := 0; i < b.N; i++ {
-            Prime(997)
-        }
+```go
+func BenchmarkPrime(b *testing.B) {
+    for i := 0; i < b.N; i++ {
+        Prime(997)
     }
+}
+```
 
 The function needs to accept a `*testing.B` object and that has details about the number of iterations your benchmark needs to be run. 
 The testing package runs the Benchmark functions several times. It keeps increasing the b.N value until the benchmark runner is satisfied with the stability of the benchmark. You must call your function b.N times, and that is why we are using a for loop to iterate till b.N times.
@@ -52,13 +56,15 @@ The testing package runs the Benchmark functions several times. It keeps increas
 ## Running benchmarks
 The command to run benchmarks is the same as before, but with an extra flag.
 
-    $ go test -bench=.
-    goos: linux
-    goarch: amd64
-    pkg: github.com/cnu/prime
-    BenchmarkPrime-4   	100000000	        18.3 ns/op
-    PASS
-    ok  	github.com/cnu/prime	1.847s
+```
+$ go test -bench=.
+goos: linux
+goarch: amd64
+pkg: github.com/cnu/prime
+BenchmarkPrime-4   	100000000	        18.3 ns/op
+PASS
+ok  	github.com/cnu/prime	1.847s
+```
 
 The output that we are interested in is the lines starting with Benchmark. This shows that the function `Prime(997)` was executed 100 Million times and on my desktop, it took 18.3 nanoseconds for each call. 
 
@@ -70,37 +76,41 @@ In our benchmark function, we were testing with only one value and testing for i
 
 Our exported Benchmark function can only take in a single argument - a variable of type `*testing.B`. So we need to have a inner helper function which can take in the number we want to benchmark it with. 
 
-
-    func benchmarkPrime(num uint, b *testing.B) {
-        for i := 0; i < b.N; i++ {
-            Prime(num)
-        }
+```go
+func benchmarkPrime(num uint, b *testing.B) {
+    for i := 0; i < b.N; i++ {
+        Prime(num)
     }
+}
+```
 
 This function is not exported, and takes in an extra argument `num` which is then passed to the Prime function call. Now we can make our BenchmarkPrime call to pass in this argument.
 
-
-    func BenchmarkPrime1(b *testing.B)       { benchmarkPrime(1, b) }
-    func BenchmarkPrime2(b *testing.B)       { benchmarkPrime(2, b) }
-    func BenchmarkPrime3(b *testing.B)       { benchmarkPrime(3, b) }
-    func BenchmarkPrime183(b *testing.B)     { benchmarkPrime(183, b) }
-    func BenchmarkPrime923(b *testing.B)     { benchmarkPrime(923, b) }
-    func BenchmarkPrime1039281(b *testing.B) { benchmarkPrime(1039281, b) }
+```
+func BenchmarkPrime1(b *testing.B)       { benchmarkPrime(1, b) }
+func BenchmarkPrime2(b *testing.B)       { benchmarkPrime(2, b) }
+func BenchmarkPrime3(b *testing.B)       { benchmarkPrime(3, b) }
+func BenchmarkPrime183(b *testing.B)     { benchmarkPrime(183, b) }
+func BenchmarkPrime923(b *testing.B)     { benchmarkPrime(923, b) }
+func BenchmarkPrime1039281(b *testing.B) { benchmarkPrime(1039281, b) }
+```
 
 It is best practice to name your Benchmark to be descriptive of the value you are testing with, so the output is easy to parse. The output is as shown below.
 
-    $ go test -bench=.
-    goos: linux
-    goarch: amd64
-    pkg: github.com/cnu/prime
-    BenchmarkPrime1-4         	1000000000	         1.98 ns/op
-    BenchmarkPrime2-4         	2000000000	         1.98 ns/op
-    BenchmarkPrime3-4         	2000000000	         1.69 ns/op
-    BenchmarkPrime183-4       	100000000	        18.2 ns/op
-    BenchmarkPrime923-4       	20000000	        82.4 ns/op
-    BenchmarkPrime1039281-4   	100000000	        18.1 ns/op
-    PASS
-    ok  	github.com/cnu/prime	15.307s
+```
+$ go test -bench=.
+goos: linux
+goarch: amd64
+pkg: github.com/cnu/prime
+BenchmarkPrime1-4         	1000000000	         1.98 ns/op
+BenchmarkPrime2-4         	2000000000	         1.98 ns/op
+BenchmarkPrime3-4         	2000000000	         1.69 ns/op
+BenchmarkPrime183-4       	100000000	        18.2 ns/op
+BenchmarkPrime923-4       	20000000	        82.4 ns/op
+BenchmarkPrime1039281-4   	100000000	        18.1 ns/op
+PASS
+ok  	github.com/cnu/prime	15.307s
+```
 
 We can see that the time taken for each operation varies based on the number we pass. This gives us a much clearer picture of how performant our function. 
 
@@ -112,17 +122,21 @@ Since the benchmarking tool progressively increases the value of b.N, you should
 
 For eg:
 
-    func BenchmarkPrimeWrong(b *testing.B) {
-        for i := 0; i < b.N; i++ {
-            Prime(uint(i))
-        }
+```go
+func BenchmarkPrimeWrong(b *testing.B) {
+    for i := 0; i < b.N; i++ {
+        Prime(uint(i))
     }
+}
+```
 
 In this example, the function wouldn't complete, because we are passing the value of i to the Prime function. And since this keeps increasing progressive, it never reaches a stable state.
 
-    func BenchmarkPrimeWrong2(b *testing.B) {
-            Prime(uint(b.N))
-    }
+```go
+func BenchmarkPrimeWrong2(b *testing.B) {
+        Prime(uint(b.N))
+}
+```
 
 And in this second example, we are passing the value b.N itself to the Prime function. This just runs it once and doesn't really runs any benchmark. The output would be 0ns/op.
 
