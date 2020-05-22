@@ -2,7 +2,7 @@
 title: "Regular Expressions in Go"
 date: 2018-12-10T23:13:00+05:30
 lastmod: 2018-12-10T23:13:00+05:30
-tags : ["regexp", "text processing"]
+tags : ["regexp", "text processing", "strings"]
 categories : [ "howto" ]
 layout: post
 highlightjslanguages: ["go"]
