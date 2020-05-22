@@ -1,9 +1,11 @@
 baseURL = "https://progolang.com/"
 languageCode = "en-us"
-theme = "hyde"
+theme = "mixedpaper"
+enableRobotsTXT = true
 title = "Pro Golang"
 disqusShortname = "progolang"
 googleAnalytics = "UA-128175831-1"
+pygmentsUseClasses = true
 
 [params]
   author = "Srinivasan Rangarajan"
@@ -22,3 +24,6 @@ googleAnalytics = "UA-128175831-1"
 [permalinks]
   posts = "/:slug/"
   page = "/:slug/"
+
+[taxonomies]
+  tag = "tags"
